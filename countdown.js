@@ -30,6 +30,8 @@ function countdown() {
 
   //this checks if it is actually possible to answer the question.
 
+  possibilities.words = [];
+
   dictionary.forEach(word => {
     for (letter of currentLetters) {
       if (!word.toLowerCase().split("").includes(letter)) return;
