@@ -13,7 +13,9 @@ let alphabet = [...Array(26).keys()].map((i) => String.fromCharCode(i + 97));
 const getRandom = (array = alphabet) =>
   array[Math.floor(Math.random() * array.length)];
 
-let level = 2;
+let letterAmount = 2;
+
+let levelNumber = 0;
 
 let score = 0;
 
@@ -21,7 +23,7 @@ const possibilities = {words: []}
 
 function countdown() {
   let currentLetters = [];
-  for (let i = 0; i < level; i++) {
+  for (let i = 0; i < letterAmount; i++) {
     let lettersLeft = alphabet.filter((el) => !currentLetters.includes(el));
     currentLetters.push(getRandom(lettersLeft));
   }
@@ -56,8 +58,9 @@ function countdown() {
         if (!currentWord.split("").includes(letter)) rl.close();
       }
       console.log(`Good job! Another word you could have gone with is ${getRandom(possibilities.words.filter(w => w !== currentWord))}`);
-      level = 2 + Math.floor(Math.cbrt(score));
-      score++;
+      letterAmount = 2 + Math.floor(Math.cbrt(levelNumber));
+      levelNumber++;
+      score += Math.floor((currentWord.length ** letterAmount) / 2);
       countdown();
     }
   );
@@ -67,7 +70,7 @@ countdown();
 
 rl.on("close", function () {
   console.log(
-    `You could have gone with "${getRandom(possibilities.words)}" :(... but unfortunately you lost, and your score was ${score}`
+    `You could have gone with "${getRandom(possibilities.words)}" :(... but unfortunately you lost, you got ${levelNumber} words right and your final score is ${score}`
   );
   process.exit(0);
 });
