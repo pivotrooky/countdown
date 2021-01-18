@@ -16,8 +16,12 @@ const getRandom = (array = alphabet) =>
 let letterAmount = 2;
 
 let levelNumber = 0;
+//how many words you got right so far
 
 let score = 0;
+//your current total score
+
+
 
 const possibilities = {words: []}
 
@@ -34,14 +38,18 @@ function countdown() {
 
   possibilities.words = [];
 
+  //this resets the words array
+
   dictionary.forEach(word => {
     for (letter of currentLetters) {
       if (!word.toLowerCase().split("").includes(letter)) return;
     }
     return possibilities.words.push(word);
   })
+  //checks all possible words that fit
 
   if (!possibilities.words.length) countdown();
+  //if it's impossible to solve, then get a new pair of letters
 
   rl.question(
     `Please input a word that includes all the following letters:
@@ -57,6 +65,9 @@ function countdown() {
       for (letter of currentLetters) {
         if (!currentWord.split("").includes(letter)) rl.close();
       }
+
+      //get to next level
+      
       console.log(`Good job! Another word you could have gone with is ${getRandom(possibilities.words.filter(w => w !== currentWord))}`);
       letterAmount = 2 + Math.floor(Math.cbrt(levelNumber));
       levelNumber++;
