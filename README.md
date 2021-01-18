@@ -1,4 +1,4 @@
-# wordsApp
+# countdown
 
 Fun little game inspired by 'Countdown' from the IT Crowd.
 
