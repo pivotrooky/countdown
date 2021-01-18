@@ -10,33 +10,34 @@ const dictionary = Object.keys(wholeDictionary);
 
 let alphabet = [...Array(26).keys()].map((i) => String.fromCharCode(i + 97));
 
-const newRandomLetter = (array = alphabet) =>
+const getRandom = (array = alphabet) =>
   array[Math.floor(Math.random() * array.length)];
 
 let level = 2;
 
 let score = 0;
 
-const possibility = { word: null };
+const possibilities = {words: []}
 
 function countdown() {
   let currentLetters = [];
   for (let i = 0; i < level; i++) {
     let lettersLeft = alphabet.filter((el) => !currentLetters.includes(el));
-    currentLetters.push(newRandomLetter(lettersLeft));
+    currentLetters.push(getRandom(lettersLeft));
   }
 
   let lettersStringified = currentLetters.join(", ");
 
   //this checks if it is actually possible to answer the question.
-  possibility.word = dictionary.find((word) => {
-    for (letter of currentLetters) {
-      if (!word.toLowerCase().split("").includes(letter)) return false;
-    }
-    return true;
-  });
 
-  if (!possibility.word) countdown();
+  dictionary.forEach(word => {
+    for (letter of currentLetters) {
+      if (!word.toLowerCase().split("").includes(letter)) return;
+    }
+    return possibilities.words.push(word);
+  })
+
+  if (!possibilities.words.length) countdown();
 
   rl.question(
     `Please input a word that includes all the following letters:
@@ -44,14 +45,15 @@ function countdown() {
     
     `,
     function (currentWord) {
-      if (!dictionary.includes(currentWord.toLowerCase())) {
+      currentWord = currentWord.toLowerCase();
+      if (!possibilities.words.includes(currentWord)) {
         rl.close();
       }
 
       for (letter of currentLetters) {
-        if (!currentWord.toLowerCase().split("").includes(letter)) rl.close();
+        if (!currentWord.split("").includes(letter)) rl.close();
       }
-      console.log("Good job!");
+      console.log(`Good job! Another word you could have gone with is ${getRandom(possibilities.words.filter(w => w !== currentWord))}`);
       level = 2 + Math.floor(Math.cbrt(score));
       score++;
       countdown();
@@ -63,7 +65,7 @@ countdown();
 
 rl.on("close", function () {
   console.log(
-    `You could have gone with "${possibility.word}" :(... but unfortunately you lost, and your score was ${score}`
+    `You could have gone with "${getRandom(possibilities.words)}" :(... but unfortunately you lost, and your score was ${score}`
   );
   process.exit(0);
 });
