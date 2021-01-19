@@ -52,7 +52,7 @@ function countdown() {
   //if it's impossible to solve, then get a new pair of letters
 
   rl.question(
-    `Please input a word that includes all the following letters:
+    `Please input a word that includes all the following letters. The longer the word, the more points you earn!
     ${lettersStringified}
     
     `,
