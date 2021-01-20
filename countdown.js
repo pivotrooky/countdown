@@ -21,9 +21,7 @@ let levelNumber = 0;
 let score = 0;
 //your current total score
 
-
-
-const possibilities = {words: []}
+const possibilities = { words: [], maxLength: 0 };
 
 function countdown() {
   let currentLetters = [];
@@ -37,15 +35,19 @@ function countdown() {
   //this checks if it is actually possible to answer the question.
 
   possibilities.words = [];
-
   //this resets the words array
 
-  dictionary.forEach(word => {
+  possibilities.maxLength = 0;
+  //this resets the max posible length of a word that fits
+
+  dictionary.forEach((word) => {
     for (letter of currentLetters) {
       if (!word.toLowerCase().split("").includes(letter)) return;
     }
+    if (word.length > possibilities.maxLength)
+      possibilities.maxLength = word.length;
     return possibilities.words.push(word);
-  })
+  });
   //checks all possible words that fit
 
   if (!possibilities.words.length) countdown();
@@ -67,11 +69,17 @@ function countdown() {
       }
 
       //get to next level
-      
-      console.log(`Good job! Another word you could have gone with is ${getRandom(possibilities.words.filter(w => w !== currentWord))}`);
+
+      console.log(
+        `Good job! Another word you could have gone with is ${getRandom(
+          possibilities.words.filter(
+            (w) => w !== currentWord && w.length === possibilities.maxLength
+          )
+        )}`
+      );
       letterAmount = 2 + Math.floor(Math.cbrt(levelNumber));
       levelNumber++;
-      score += Math.floor((currentWord.length ** letterAmount) / 2);
+      score += Math.floor(currentWord.length ** letterAmount / 2);
       countdown();
     }
   );
@@ -81,7 +89,9 @@ countdown();
 
 rl.on("close", function () {
   console.log(
-    `You could have gone with "${getRandom(possibilities.words)}" :(... but unfortunately you lost, you got ${levelNumber} words right and your final score is ${score}`
+    `You could have gone with "${getRandom(
+      possibilities.words.filter((w) => w.length === possibilities.maxLength)
+    )}" :(... but unfortunately you lost, you got ${levelNumber} words right and your final score is ${score}`
   );
   process.exit(0);
 });
