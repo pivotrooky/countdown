@@ -1,3 +1,4 @@
+const fs = require('fs');
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
@@ -88,10 +89,27 @@ function countdown() {
 countdown();
 
 rl.on("close", function () {
+
+  const highScore = fs.readFileSync('./highscore.txt', 
+  {encoding:'utf8', flag:'r'}); 
+
   console.log(
     `You could have gone with "${getRandom(
       possibilities.words.filter((w) => w.length === possibilities.maxLength)
     )}" :(... but unfortunately you lost, you got ${levelNumber} words right and your final score is ${score}`
   );
+
+
+  if (score > highScore)  {
+    console.log(`Congratulations on setting a new high score, though! You're now at ${highScore} points`)
+
+    fs.writeFileSync('./highscore.txt', `${score}`);
+
+    console.log(`You did set a new highscore though... ${highScore}`)
+  }
+  else {
+    console.log(`Your highscore is still ${highScore}`)
+  }¡
+
   process.exit(0);
 });
