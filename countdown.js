@@ -109,7 +109,7 @@ rl.on("close", function () {
   }
   else {
     console.log(`Your highscore is still ${highScore}`)
-  }¡
+  }
 
   process.exit(0);
 });
