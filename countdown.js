@@ -104,6 +104,8 @@ rl.on("close", function () {
     console.log(`Congratulations on setting a new high score, though! You're now at ${highScore} points`)
 
     fs.writeFileSync('./highscore.txt', `${score}`);
+    //overwrites previous high score
+    //maybe one could keep previous high scores in order to make comparisons?
 
     console.log(`You did set a new highscore though... ${highScore}`)
   }
