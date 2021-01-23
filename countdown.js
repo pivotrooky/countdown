@@ -93,23 +93,17 @@ rl.on("close", function () {
   const highScore = fs.readFileSync('./highscore.txt', 
   {encoding:'utf8', flag:'r'}); 
 
-  console.log(
-    `You could have gone with "${getRandom(
-      possibilities.words.filter((w) => w.length === possibilities.maxLength)
-    )}" :(... but unfortunately you lost, you got ${levelNumber} words right and your final score is ${score}`
-  );
-
-
-  if (score > highScore)  {
-    console.log(`Congratulations on setting a new high score, though! You're now at ${highScore} points`)
-
+  let msg = `You could have gone with "${getRandom(
+    possibilities.words.filter((w) => w.length === possibilities.maxLength)
+  )}" :(... but unfortunately you lost, you got ${levelNumber} words right and your final score is ${score}`
+  
+  if (score > highScore) {
+    msg += "... which is now your new high score!"
     fs.writeFileSync('./highscore.txt', `${score}`);
-
-    console.log(`You did set a new highscore though... ${highScore}`)
-  }
-  else {
-    console.log(`Your highscore is still ${highScore}`)
   }
 
+  console.log(msg);
+  
   process.exit(0);
+
 });
