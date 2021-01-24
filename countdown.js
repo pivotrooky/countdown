@@ -42,7 +42,7 @@ function countdown() {
   //this resets the max posible length of a word that fits
 
   dictionary.forEach((word) => {
-    for (letter of currentLetters) {
+    for (let letter of currentLetters) {
       if (!word.toLowerCase().split("").includes(letter)) return;
     }
     if (word.length > possibilities.maxLength)
@@ -65,7 +65,7 @@ function countdown() {
         rl.close();
       }
 
-      for (letter of currentLetters) {
+      for (let letter of currentLetters) {
         if (!currentWord.split("").includes(letter)) rl.close();
       }
 
