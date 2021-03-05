@@ -76,7 +76,7 @@ function countdown() {
           possibilities.words.filter(
             (w) => w !== currentWord && w.length === possibilities.maxLength
           )
-        )}`
+        )}, or some other shorter word, probably`
       );
       letterAmount = 2 + Math.floor(Math.cbrt(levelNumber));
       levelNumber++;
